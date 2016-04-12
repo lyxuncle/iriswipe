@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>Canvas虹膜消除转场</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no" />
+  <style>
+  	body{padding:0;margin:0;}
+  	.iriswipe, .page{width: 100%;height: 100%; position: absolute; top: 0; left: 0;}
+  	.iriswipe {z-index: 10;}
+  	.page {background-repeat: no-repeat; background-position: center; background-size: cover;display:none;}
+  	.page1 {background-image: url(images/Looney_tunes_careta.png);}
+  		.page1 span {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #FFF; color: #00055A; font-size: 40px; padding: 20px; border-radius: 20px;}
+  	.page2 {background-image: url(images/Merrie_Melodies_classic_title_card.png);}
+  </style>
+</head>
+<body>
+	<div class="container" id="container">
+		<canvas class="iriswipe" id="irisWipe" style="display:none;"></canvas>
+		<div class="page page1" data-cur='1' style="display:block;"><span>单击屏幕转场</span></div>
+		<div class="page page2" data-cur='0'></div>
+	</div>
+	<script src="lib/iriswipe.js"></script>
+  <script>
+  	!function(x){
+  		function w(){
+  			var s=x.document, 
+  				r=s.documentElement, 
+  				w=r.clientWidth, 
+  				h=r.clientHeight, 
+  				cont=s.getElementById('container');
+
+  			cont.style.width = w + 'px';
+  			cont.style.height = h + 'px';
+  		}
+  		x.addEventListener("resize", function(){w();});
+  		w();
+  	}(window);
+  </script>
+	<script>
+		var canvas = document.getElementById('irisWipe'); 
+		Iris.canvas = canvas;
+		Iris.poses.steps = [
+			{x: 50, y: 50}, 	// 收缩中心点，单位百分比
+			{x: 30, y: 10}	 	// 放大中心点，单位百分比
+		];
+		Iris.speed = [12, 20]; 	// 收缩速度，放大速度
+
+		var pageArr = document.querySelectorAll('.page');
+		document.getElementById('container').addEventListener('click', function(){
+			Iris.init();
+			setTimeout(function(){
+				Array.prototype.forEach.call(pageArr, function(item, idx){
+					var cur = item.getAttribute('data-cur');
+					if(cur=='1'){
+						item.setAttribute('data-cur', '0');
+						item.style.display = 'none';
+					}else{
+						item.setAttribute('data-cur', '1');
+						item.style.display = 'block';
+					}
+				});
+			}, 200);
+		});
+	</script>
+</body>
+</html>
