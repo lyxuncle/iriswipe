@@ -42,16 +42,22 @@
   </script>
 	<script>
 		var canvas = document.getElementById('irisWipe'); 
-		Iris.canvas = canvas;
-		Iris.poses.steps = [
-			{x: 50, y: 50}, 	// 收缩中心点，单位百分比
-			{x: 30, y: 10}	 	// 放大中心点，单位百分比
-		];
-		Iris.speed = [12, 20]; 	// 收缩速度，放大速度
+		var irisConf = {
+			canvas: canvas, 	// 画布对象
+			poses: {
+				steps: [
+					{x: 50, y: 50}, 	// 收缩中心点，单位百分比
+					{x: 30, y: 10}	 	// 放大中心点，单位百分比
+				]
+			}, 
+			speed: [12, 20]	// 收缩速度，放大速度，单位百分比
+		};
 
 		var pageArr = document.querySelectorAll('.page');
 		document.getElementById('container').addEventListener('click', function(){
-			Iris.init();
+
+			Iris.construct(irisConf); 	// 调用虹膜消除转场
+
 			setTimeout(function(){
 				Array.prototype.forEach.call(pageArr, function(item, idx){
 					var cur = item.getAttribute('data-cur');
